@@ -25,12 +25,12 @@ class Client extends Actor with Timers with StrictLogging {
 
   override def receive: Receive = stateInt(id)
   def stateInt(token: Int): Receive = {
-    case ActorIdentity(id, remoteActor) =>
-      if (id == token && remoteActor.isDefined) {
-        remoteActor.get ! newReq()
-        context.become(stateActive(remoteActor.get))
+    case ActorIdentity(id, actorRef) =>
+      if (id == token && actorRef.isDefined) {
+        context.become(stateActive(actorRef.get))
+        actorRef foreach (_ ! newReq())
       } else {
-        logger.debug(s"id=$id actor=$remoteActor")
+        logger.debug(s"id=$id actor=$actorRef")
       }
   }
 
@@ -38,13 +38,14 @@ class Client extends Actor with Timers with StrictLogging {
     case Ticker =>
       logger.debug(s"count=$count")
       count = 0
-    case Response(_) =>
+    case Response(answer) =>
       count += 1
       remoteActor ! newReq()
   }
+
   def newReq(): Request = Request(Random.nextInt(20), Random.nextInt(10))
 }
 
 object Client {
-  object Ticker
+  case object Ticker
 }
