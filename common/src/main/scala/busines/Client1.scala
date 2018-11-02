@@ -1,15 +1,19 @@
-package cc.client
+package busines
+
 import akka.actor.{Actor, Timers}
 import com.typesafe.scalalogging.StrictLogging
-import concurrent.duration._
+
+import scala.concurrent.duration._
 import scala.util.Random
 
-class Client extends Actor with Timers with StrictLogging {
+/**
+  * 基于Select 方式进行远程actor通信
+  */
+class Client1 extends Actor with Timers with StrictLogging {
   import akka.actor.{ActorIdentity, ActorRef}
   import cc.event.{Request, Response}
-  import cc.client.Client.Ticker
 
-  val path = "akka://frontserver@127.0.0.1:2552/user/front"
+  val path = "akka://frontserver@127.0.0.1:2552/user/caculator"
   val id = Random.nextInt()
   val selection = context.actorSelection(path)
   var count = 0
@@ -36,21 +40,12 @@ class Client extends Actor with Timers with StrictLogging {
 
   def stateActive(remoteActor: ActorRef): Receive = {
     case Ticker =>
-      import scala.concurrent.Future
-      import context.dispatcher
-      val value = count
-      count = 0
-      Future {
-        logger.debug(s"count=$value")
-      }
-    case Response(answer) =>
-      count += 1
       remoteActor ! newReq()
+    case Response(answer) =>
+      logger.debug(s"answer is $answer")
   }
 
   def newReq(): Request = Request(Random.nextInt(20), Random.nextInt(10))
 }
 
-object Client {
-  case object Ticker
-}
+case object Ticker
