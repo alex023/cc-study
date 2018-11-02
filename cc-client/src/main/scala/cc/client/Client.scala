@@ -9,7 +9,7 @@ class Client extends Actor with Timers with StrictLogging {
   import cc.event.{Request, Response}
   import cc.client.Client.Ticker
 
-  val path = "akka.tcp://frontserver@127.0.0.1:2552/user/front"
+  val path = "akka://frontserver@127.0.0.1:2552/user/front"
   val id = Random.nextInt()
   val selection = context.actorSelection(path)
   var count = 0
@@ -36,8 +36,13 @@ class Client extends Actor with Timers with StrictLogging {
 
   def stateActive(remoteActor: ActorRef): Receive = {
     case Ticker =>
-      logger.debug(s"count=$count")
+      import scala.concurrent.Future
+      import context.dispatcher
+      val value = count
       count = 0
+      Future {
+        logger.debug(s"count=$value")
+      }
     case Response(answer) =>
       count += 1
       remoteActor ! newReq()
