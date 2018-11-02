@@ -7,9 +7,9 @@ import scala.concurrent.duration._
 import scala.util.Random
 
 /**
-  * 基于Select 方式进行远程actor通信
+  * 基于Select Identify 方式获取远程对象，并进行通信
   */
-class Client1 extends Actor with Timers with StrictLogging {
+class ClientByIdentify extends Actor with Timers with StrictLogging {
   import akka.actor.{ActorIdentity, ActorRef}
   import cc.event.{Request, Response}
 

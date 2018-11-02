@@ -11,6 +11,7 @@ class Caculator extends Actor with StrictLogging {
       sender() ! Response(x + y)
   }
   override def preStart(): Unit = {
-    logger.info(s"created ${context.self.path} ")
+    logger.info(s"created ${context.self.path}  ${    context.self.toString()
+    }")
   }
 }
