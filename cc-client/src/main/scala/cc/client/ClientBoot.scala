@@ -1,9 +1,9 @@
 package cc.client
+import akka.actor.{ActorSystem, Props}
+import busines.{ClientByIdentify, ClientCreateRemote}
 import com.typesafe.scalalogging.StrictLogging
 
 object ClientBoot extends App with StrictLogging {
-  import akka.actor.{ActorSystem, Props}
-  import busines.{ClientByIdentify, ClientCreateRemote}
   val system = ActorSystem("client")
   //测试远程查询
   val client1 = system.actorOf(Props(new ClientByIdentify), "client1")

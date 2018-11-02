@@ -1,17 +1,16 @@
 package busines
 
-import akka.actor.{Actor, Timers}
+import akka.actor.{Actor, ActorIdentity, ActorRef, Timers}
+import cc.event.{Request, Response, Ticker}
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.concurrent.duration._
 import scala.util.Random
-
 /**
   * 基于Select Identify 方式获取远程对象，并进行通信
   */
 class ClientByIdentify extends Actor with Timers with StrictLogging {
-  import akka.actor.{ActorIdentity, ActorRef}
-  import cc.event.{Request, Response}
+
 
   val path = "akka://frontserver@127.0.0.1:2552/user/caculator"
   val id = Random.nextInt()
@@ -28,6 +27,7 @@ class ClientByIdentify extends Actor with Timers with StrictLogging {
   }
 
   override def receive: Receive = stateInt(id)
+
   def stateInt(token: Int): Receive = {
     case ActorIdentity(id, actorRef) =>
       if (id == token && actorRef.isDefined) {
@@ -48,4 +48,3 @@ class ClientByIdentify extends Actor with Timers with StrictLogging {
   def newReq(): Request = Request(Random.nextInt(20), Random.nextInt(10))
 }
 
-case object Ticker
