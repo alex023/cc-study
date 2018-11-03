@@ -26,7 +26,7 @@ class ClientCreateRemote(id: String, caculatorName: String)
     import context.dispatcher
 
     import concurrent.duration._
-    val path = s"/user/"
+    val path = "/user/"
     val selection: ActorSelection =
       context.actorSelection(path + caculatorName)
     selection.resolveOne(5.seconds).onComplete {

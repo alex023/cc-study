@@ -2,7 +2,7 @@ import Commons._
 import Dependencies._
 import Environment._
 
-lazy val root = Project(id = "cc-study", base = file("."))
+lazy val root = Project(id = "cc-study01", base = file("."))
   .aggregate(`cc-client`, `cc-frontserver`, `cc-backend`, common)
   .settings(settings: _*)
 

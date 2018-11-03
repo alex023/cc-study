@@ -11,10 +11,16 @@ object ClientBoot extends App with StrictLogging {
 
   //测试远程调用对象查询及创建
   val client21 =
-    system.actorOf(Props(new ClientCreateRemote("client21", "remotePlus")), "client2_1")
+    system.actorOf(
+      Props(new ClientCreateRemote("client21", "remotePlus")),
+      "client2_1"
+    )
   logger.info(s"client2_remote path= ${client21.path}")
   Thread.sleep(10000)
   val client22 =
-    system.actorOf(Props(new ClientCreateRemote("client22", "remotePlus")), "client2_2")
+    system.actorOf(
+      Props(new ClientCreateRemote("client22", "remotePlus")),
+      "client2_2"
+    )
   logger.info(s"client2_remote path= ${client22.path}")
 }
